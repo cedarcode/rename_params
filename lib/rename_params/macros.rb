@@ -2,11 +2,10 @@ module RenameParams
   module Macros
     extend ActiveSupport::Concern
 
-    class_methods do
+    module ClassMethods
       def rename(*args)
         current_param = args.shift
-        before_action_options = extract_callback_options(*args)
-        before_action "rename_param_#{current_param}".to_sym, before_action_options
+        before_filter "rename_param_#{current_param}".to_sym, extract_callback_options(*args)
 
         define_method("rename_param_#{current_param}") do
           Params.new(params).rename(current_param, *args)
@@ -19,7 +18,7 @@ module RenameParams
         {
           only: args.delete(:only),
           except: args.delete(:except)
-        }.compact
+        }.reject { |_, v| v.nil? }
       end
     end
   end

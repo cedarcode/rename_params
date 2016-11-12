@@ -1,6 +1,6 @@
 require 'rails/all'
 
-module Rails5
+module Rails50
   class Application < Rails::Application
     # The test environment is used exclusively to run your application's
     # test suite. You never need to work with it otherwise. Remember that

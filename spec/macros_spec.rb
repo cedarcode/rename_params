@@ -1,43 +1,62 @@
-describe RenameParams::Macros do
-
+describe RenameParams::Macros, type: :controller do
   describe '.rename' do
     context 'when not converting values' do
-      let(:params) { { username: 'aperson' } }
+      controller(ActionController::Base) do
+        rename :username, to: :login
+
+        def index
+          head :ok
+        end
+      end
+
       before do
-        spawn_controller(:UsersController) { rename :username, to: :login }
+        routes.draw { get 'index' => 'anonymous#index' }
+        get :index, params: { username: 'aperson' }
       end
 
       it 'renames username to login' do
-        expected = { login: 'aperson' }
+        expected = { controller: 'anonymous', action: 'index', login: 'aperson' }
         expect(controller.params).to eq ActionController::Parameters.new(expected)
       end
     end
 
     context 'when converting values' do
       context 'and using enum converter' do
-        let(:params) { { admin: 'true' } }
-        before do
-          spawn_controller(:UsersController) do
-            rename :admin, to: :role, convert: { true: ['admin'], false: [] }
+        controller(ActionController::Base) do
+          rename :admin, to: :role, convert: { true: ['admin'], false: [] }
+
+          def index
+            head :ok
           end
         end
 
+        before do
+          routes.draw { get 'index' => 'anonymous#index' }
+          get :index, params: { admin: 'true' }
+        end
+
         it 'renames admin to role and converts value' do
-          expected = { role: ['admin'] }
+          expected = { controller: 'anonymous', action: 'index', role: ['admin'] }
           expect(controller.params).to eq ActionController::Parameters.new(expected)
         end
       end
 
       context 'and using a Proc converter' do
-        let(:params) { { amount_due: 100 } }
-        before do
-          spawn_controller(:UsersController) do
-            rename :amount_due, to: :amount_due_in_cents, convert: ->(value) { value * 100 }
+        controller(ActionController::Base) do
+          rename :amount_due, to: :amount_due_in_cents, convert: ->(value) { value.to_i * 100 }
+
+          def index
+            head :ok
           end
         end
 
+        before do
+          routes.draw { get 'index' => 'anonymous#index' }
+          get :index, params: { amount_due: 100 }
+        end
+
         it 'renames admin to role and converts value' do
-          expected = { amount_due_in_cents: 10000 }
+          expected = { controller: 'anonymous', action: 'index', amount_due_in_cents: 10000 }
           expect(controller.params).to eq ActionController::Parameters.new(expected)
         end
       end

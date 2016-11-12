@@ -1,3 +1,6 @@
+ENV['RAILS_ENV'] = 'test'
+ENV['DATABASE_URL'] = 'sqlite3://localhost/tmp/rename_params_test'
+
 require 'rename_params'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

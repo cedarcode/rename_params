@@ -5,10 +5,14 @@ module RenameParams
     module ClassMethods
       def rename(*args)
         current_param = args.shift
-        before_filter "rename_param_#{current_param}".to_sym, extract_callback_options(*args)
+        callback_options = extract_callback_options(*args)
+        options = args.shift
+        before_filter "rename_param_#{current_param}".to_sym, callback_options
 
         define_method("rename_param_#{current_param}") do
-          Params.new(params).rename(current_param, *args)
+          rename_params = Params.new(params)
+          rename_params.convert(current_param, options[:convert])
+          rename_params.rename(current_param, options[:to])
         end
       end
 

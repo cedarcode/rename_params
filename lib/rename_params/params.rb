@@ -7,27 +7,25 @@ module RenameParams
       @params = params
     end
 
-    def rename(key, options = {})
-      to = options[:to]
+    def convert(key, converter)
+      klass = converter_class(converter)
 
-      if @params.has_key?(key)
-        if options[:convert]
-          set_value(key, to, options[:convert])
-        else
-          @params[to] = @params.delete(key)
-        end
+      if klass && @params.has_key?(key)
+        @params[key] = klass.new(converter).convert(@params[key])
       end
+    end
+
+    def rename(key, new_key)
+      @params[new_key] = @params.delete(key) if @params.has_key?(key)
     end
 
     private
 
-    def set_value(key, to, value_converter)
-      previous_value = @params.delete(key)
-
-      if value_converter.is_a?(Hash)
-        @params[to] = value_converter.with_indifferent_access[previous_value]
-      elsif value_converter.is_a?(Proc)
-        @params[to] = value_converter.call(previous_value)
+    def converter_class(converter)
+      if converter.is_a?(Hash)
+        HashConverter
+      elsif converter.is_a?(Proc)
+        ProcConverter
       end
     end
 

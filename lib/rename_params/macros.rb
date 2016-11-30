@@ -5,20 +5,32 @@ module RenameParams
     module ClassMethods
       def rename(*args)
         current_param = args.shift
-        callback_options = extract_callback_options(*args)
-        options = args.shift
-        before_filter "rename_param_#{current_param}".to_sym, callback_options
+        options = build_options(*args)
+        before_filter "rename_param_#{current_param}".to_sym, options[:filters]
 
         define_method("rename_param_#{current_param}") do
-          rename_params = Params.new(params)
-          rename_params.convert(current_param, options[:convert])
-          rename_params.rename(current_param, options[:to])
+          new_params = RenameParams::Params.new(params)
+          new_params.convert(current_param, options[:convert], options[:namespace])
+          new_params.rename(current_param, options[:to], options[:namespace])
         end
       end
 
       private
 
-      def extract_callback_options(args = {})
+      def build_options(args = {})
+        {
+          to: args[:to],
+          convert: args[:convert],
+          namespace: namespace_options(args),
+          filters: filter_options(args)
+        }
+      end
+
+      def namespace_options(args = {})
+        args[:namespace].is_a?(Array) ? args[:namespace] : [args[:namespace]].compact
+      end
+
+      def filter_options(args = {})
         {
           only: args.delete(:only),
           except: args.delete(:except)

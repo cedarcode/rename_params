@@ -5,7 +5,7 @@ describe RenameParams::Macros, type: :controller do
       let(:default_params) { { 'controller' => 'anonymous', 'action' => 'index' } }
       before { routes.draw { get 'index' => 'anonymous#index' } }
 
-      context 'when just renaming params' do
+      describe 'when just renaming params' do
         controller(ActionController::Base) do
           rename :username, to: :login
 
@@ -27,7 +27,7 @@ describe RenameParams::Macros, type: :controller do
         end
       end
 
-      context 'when converting values' do
+      describe 'when converting values' do
         context 'and using enum converter' do
           controller(ActionController::Base) do
             rename :admin, to: :role, convert: { true: ['admin'], false: [] }
@@ -72,6 +72,59 @@ describe RenameParams::Macros, type: :controller do
           end
         end
       end
+
+      describe 'when nested params' do
+        context 'using only one namespace' do
+          controller(ActionController::Base) do
+            rename :username, to: :login, namespace: :session
+
+            def index
+              head :ok
+            end
+          end
+
+          it 'renames username to login' do
+            get :index, { 'session' => { 'username' => 'aperson' } }
+            expect(controller.params).to eq default_params.merge('session' => { 'login' => 'aperson' })
+          end
+
+          context 'if param is not sent' do
+            it 'leaves params as they were' do
+              get :index, { 'session' => '' }
+              expect(controller.params).to eq default_params.merge('session' => '')
+            end
+          end
+        end
+
+        context 'using more than one nest levels' do
+          controller(ActionController::Base) do
+            rename :username, to: :login, namespace: [:session, :credentials]
+
+            def index
+              head :ok
+            end
+          end
+
+          it 'renames username to login' do
+            get :index, { 'session' => { 'credentials' => { 'username' => 'aperson' } } }
+            expect(controller.params).to eq default_params.merge('session' => { 'credentials' => { 'login' => 'aperson' } })
+          end
+
+          context 'if param is not sent' do
+            it 'leaves params as they were' do
+              get :index, { 'session' => { 'credentials' => '' } }
+              expect(controller.params).to eq default_params.merge('session' => { 'credentials' => '' })
+            end
+          end
+
+          context 'if namespace is not sent' do
+            it 'leaves params as they were' do
+              get :index, { 'session' => '' }
+              expect(controller.params).to eq default_params.merge('session' => '')
+            end
+          end
+        end
+      end
     end
 
     context 'when filtering' do
@@ -92,7 +145,7 @@ describe RenameParams::Macros, type: :controller do
           before { routes.draw { get 'show' => 'anonymous#show' } }
 
           it 'renames username to login' do
-            get :show, { username: 'aperson' }
+            get :show, { 'username' => 'aperson' }
             expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'show', 'login' => 'aperson')
           end
         end
@@ -101,7 +154,7 @@ describe RenameParams::Macros, type: :controller do
           before { routes.draw { get 'index' => 'anonymous#index' } }
 
           it 'keeps username param' do
-            get :index, { username: 'aperson' }
+            get :index, { 'username' => 'aperson' }
             expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'username' => 'aperson')
           end
         end
@@ -124,7 +177,7 @@ describe RenameParams::Macros, type: :controller do
           before { routes.draw { get 'show' => 'anonymous#show' } }
 
           it 'keeps username param' do
-            get :show, { username: 'aperson' }
+            get :show, { 'username' => 'aperson' }
             expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'show', 'username' => 'aperson')
           end
         end
@@ -133,7 +186,7 @@ describe RenameParams::Macros, type: :controller do
           before { routes.draw { get 'index' => 'anonymous#index' } }
 
           it 'renames username to login' do
-            get :index, { username: 'aperson' }
+            get :index, { 'username' => 'aperson' }
             expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'login' => 'aperson')
           end
         end

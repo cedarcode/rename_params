@@ -48,9 +48,9 @@ module RenameParams
 
     def converter_class(converter)
       if converter.is_a?(Hash)
-        HashConverter
+        RenameParams::Converters::HashConverter
       elsif converter.is_a?(Proc)
-        ProcConverter
+        RenameParams::Converters::ProcConverter
       end
     end
   end

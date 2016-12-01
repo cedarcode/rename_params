@@ -9,9 +9,12 @@ Gem::Specification.new do |s|
   s.description = 'Simple params renaming for Rails applications'
   s.authors     = ['Marcelo Casiraghi']
   s.email       = 'marcelo@paragon-labs.com'
-  s.files       = ['lib/rename_params.rb']
   s.homepage    = 'http://rubygems.org/gems/rename_params'
   s.license     = 'MIT'
+
+  s.files         = `git ls-files`.split('\n')
+  s.test_files    = `git ls-files -- spec/*`.split('\n')
+  s.require_paths = ['lib']
 
   s.add_dependency 'activesupport'
   s.add_dependency 'actionpack'

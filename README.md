@@ -119,7 +119,7 @@ The example above will convert the `status` parameter from `open`/`in_progress`/
 
 ### Proc converter
 
-You can also use a `Proc` to convert the value to whatever makes sense by executing ruby code.
+You can also use a `Proc` or a private method to convert the value to whatever makes sense by executing ruby code.
 
 ```ruby
 class UsersController < ApplicationController
@@ -134,6 +134,20 @@ Assuming `Time.current` is in 2016, this will result in the following conversion
 > puts params
 { year_of_birth: 1988 }
 ```
+
+If you want to use private method instead of a proc, you can just declare it like this:
+
+```ruby
+class UsersController < ApplicationController
+  rename :age, to: :year_of_birth, convert: :to_year
+
+  private
+
+  def to_year(value)
+    Date.today.year - value
+  end
+end
+````
 
 ## Multiple renaming
 

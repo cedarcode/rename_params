@@ -9,7 +9,7 @@ module RenameParams
         before_filter "rename_param_#{current_param}".to_sym, options[:filters]
 
         define_method("rename_param_#{current_param}") do
-          new_params = RenameParams::Params.new(params)
+          new_params = RenameParams::Params.new(params, self)
           new_params.convert(current_param, options[:convert], options[:namespace])
           new_params.rename(current_param, options[:to], options[:namespace])
         end

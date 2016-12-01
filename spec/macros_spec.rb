@@ -71,6 +71,34 @@ describe RenameParams::Macros, type: :controller do
             end
           end
         end
+
+        context 'and using a method converter' do
+          controller(ActionController::Base) do
+            rename :amount_due, to: :amount_due_in_cents, convert: :to_cents
+
+            def index
+              head :ok
+            end
+
+            private
+
+            def to_cents(value)
+              value.to_f * 100
+            end
+          end
+
+          it 'renames amount_due to amount_due_in_cents and converts value' do
+            get :index, { amount_due: 100 }
+            expect(controller.params).to eq default_params.merge('amount_due_in_cents' => 10000)
+          end
+
+          context 'if param is not sent' do
+            it 'leaves params as they were' do
+              get :index
+              expect(controller.params).to eq default_params
+            end
+          end
+        end
       end
 
       describe 'when nested params' do

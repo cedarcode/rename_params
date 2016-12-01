@@ -4,15 +4,16 @@ module RenameParams
     attr_reader :params
     delegate :[], to: :params
 
-    def initialize(params = {})
+    def initialize(params = {}, controller = nil)
       @params = params
+      @controller = controller
     end
 
     def convert(key, converter, namespace = [])
-      klass = converter_class(converter)
+      converter = converter_class(converter)
 
-      if klass && has_key?(key, namespace)
-        new_value = klass.new(converter).convert(get(key, namespace))
+      if converter && has_key?(key, namespace)
+        new_value = converter.convert(get(key, namespace))
         set(key, new_value)
       end
     end
@@ -48,9 +49,11 @@ module RenameParams
 
     def converter_class(converter)
       if converter.is_a?(Hash)
-        RenameParams::Converters::HashConverter
+        RenameParams::Converters::HashConverter.new(converter)
       elsif converter.is_a?(Proc)
-        RenameParams::Converters::ProcConverter
+        RenameParams::Converters::ProcConverter.new(converter)
+      elsif converter.is_a?(Symbol)
+        RenameParams::Converters::MethodConverter.new(converter, @controller)
       end
     end
   end

@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/marceloeloelo/rename_params.svg?branch=master)](https://travis-ci.org/marceloeloelo/rename_params)
 [![Code Climate](https://codeclimate.com/github/marceloeloelo/rename_params/badges/gpa.svg)](https://codeclimate.com/github/marceloeloelo/rename_params)
+[![Gem Version](https://badge.fury.io/rb/rename_params.svg)](https://badge.fury.io/rb/rename_params)
 
 Simple params renaming for Rails applications.
 

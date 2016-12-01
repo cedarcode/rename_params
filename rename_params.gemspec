@@ -1,6 +1,9 @@
+$:.push File.expand_path('../lib', __FILE__)
+require 'rename_params/version'
+
 Gem::Specification.new do |s|
   s.name        = 'rename_params'
-  s.version     = '1.0.0'
+  s.version     = RenameParams::VERSION.dup
   s.date        = '2016-10-31'
   s.summary     = 'Simple params renaming for Rails applications'
   s.description = 'Simple params renaming for Rails applications'

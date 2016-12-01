@@ -4,6 +4,7 @@ require 'rename_params/version'
 Gem::Specification.new do |s|
   s.name        = 'rename_params'
   s.version     = RenameParams::VERSION.dup
+  s.platform    = Gem::Platform::RUBY
   s.date        = '2016-10-31'
   s.summary     = 'Simple params renaming for Rails applications'
   s.description = 'Simple params renaming for Rails applications'
@@ -12,9 +13,8 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://rubygems.org/gems/rename_params'
   s.license     = 'MIT'
 
-  s.files         = `git ls-files`.split('\n')
-  s.test_files    = `git ls-files -- spec/*`.split('\n')
-  s.require_paths = ['lib']
+  s.files         = `git ls-files -- lib/*`.split("\n")
+  s.test_files    = `git ls-files -- spec/*`.split("\n")
 
   s.add_dependency 'activesupport'
   s.add_dependency 'actionpack'

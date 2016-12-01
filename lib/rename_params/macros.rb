@@ -6,9 +6,8 @@ module RenameParams
       def rename(*args)
         current_param = args.shift
         options = build_options(*args)
-        before_filter "rename_param_#{current_param}".to_sym, options[:filters]
 
-        define_method("rename_param_#{current_param}") do
+        before_filter options[:filters] do
           new_params = RenameParams::Params.new(params, self)
           new_params.convert(current_param, options[:convert], options[:namespace])
           new_params.rename(current_param, options[:to], options[:namespace])

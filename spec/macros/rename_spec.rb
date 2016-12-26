@@ -251,7 +251,7 @@ describe RenameParams::Macros::Rename, type: :controller do
       describe 'move_to' do
         before { routes.draw { get 'update' => 'anonymous#update' } }
 
-        it 'renames billing_contact[:name] to billing_contact_name' do
+        it 'renames billing_contact[:address][:street] to billing_contact[:street_address]' do
           put :update, { 'billing_contact' => { 'address' => { 'street' => '123 St' } } }
           expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => { 'address' => {}, 'address_street' => '123 St' } )
         end

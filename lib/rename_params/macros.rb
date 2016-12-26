@@ -1,9 +1,16 @@
-require 'rename_params/macros/rename'
-
 module RenameParams
   module Macros
     extend ActiveSupport::Concern
-    include RenameParams::Macros::Rename
+
+    module ClassMethods
+      def rename(*args)
+        RenameParams::Macros::Rename.def_rename(self, *args)
+      end
+
+      def move(*args)
+        RenameParams::Macros::Move.def_move(self, *args)
+      end
+    end
   end
 end
 

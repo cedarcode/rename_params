@@ -35,4 +35,22 @@ describe RenameParams::Params do
       it { expect(params[:b]).to eq 'BB' }
     end
   end
+
+  describe '#move' do
+    let(:params) { RenameParams::Params.new(a: 'A', b: 'B', c: { d: 'D' }) }
+
+    context 'when moving to nested key' do
+      before { params.move(:b, [:c]) }
+
+      it { expect(params[:b]).to be_nil }
+      it { expect(params[:c][:b]).to eq 'B' }
+    end
+
+    context 'when moving to root' do
+      before { params.move(:d, [], [:c]) }
+
+      it { expect(params[:d]).to eq 'D' }
+      it { expect(params[:c][:d]).to be_nil }
+    end
+  end
 end

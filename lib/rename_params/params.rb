@@ -22,9 +22,14 @@ module RenameParams
       set(new_key, delete(key, namespace), namespace) if has_key?(key, namespace)
     end
 
+    def move(key, target = [], namespace = [])
+      set(key, delete(key, namespace), target)
+    end
+
     private
 
     def set(key, value, namespace = [])
+      create_namespace(namespace)
       namespaced(namespace)[key] = value
     end
 
@@ -45,6 +50,14 @@ module RenameParams
       params = @params
       namespace.each { |ns| params = params.present? ? params[ns] : nil }
       params
+    end
+
+    def create_namespace(namespace)
+      params = @params
+      namespace.each do |ns|
+        params[ns] ||= {}
+        params = params[ns]
+      end
     end
 
     def converter_class(converter)

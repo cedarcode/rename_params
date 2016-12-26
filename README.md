@@ -153,7 +153,8 @@ end
 ## Multiple renaming
 
 If you need to rename more than one parameter, just specify as many `rename` declarations
-as you need.
+as you need. Normally you will want to put the `rename` declarations at the top of the file, before
+any `before_action` in your controller.
 
 ```ruby
 class UsersController < ApplicationController
@@ -164,6 +165,60 @@ end
 
 You can think of the transformations as if they were ran in sequence in the same order
 they were defined. So keep this in mind if one transformation depends on a previous one.
+
+## Moving params
+
+There will be some cases where you will need to move a param from one namespace to another. For those
+cases, you can uses the `move_to` option.
+
+```ruby
+class UsersController < ApplicationController
+  # Renames params[:username] to params[:user][:login]
+  rename :username, to: :login, move_to: :user, only: :create
+
+  def create
+    #...
+  end
+end
+```
+
+In this case, the params were sent like
+```
+> puts params
+{ username: 'aperson' }
+```
+
+But they were transformed to:
+```
+> puts params
+{ 
+  user: {
+    login: 'aperson
+  }
+}
+```
+
+### The root option
+
+If you need to move a param to the `root` level, you can do that:
+
+```ruby
+class UsersController < ApplicationController
+  # Renames params[:user][:login] to params[:username]
+  rename :login, to: :username, move_to: :root
+end
+```
+
+Doing a request like the following:
+```
+GET `/users?user[login]=aperson`
+```
+
+Will rename the params to:
+```
+> puts params
+{ username: 'aperson' }
+```
 
 ## Contributing
 

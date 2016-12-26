@@ -97,6 +97,21 @@ describe RenameParams::Macros::Rename, type: :controller do
           end
         end
       end
+
+      context 'if param is nested' do
+        controller(ActionController::Base) do
+          rename :admin, to: :role, namespace: :user, convert: { true: ['admin'], false: [] }
+
+          def index
+            head :ok
+          end
+        end
+
+        it 'renames admin to role and converts value' do
+          get :index, { user: { admin: 'true' } }
+          expect(controller.params).to eq default_params.merge({ 'user' => { 'role' => ['admin'] } })
+        end
+      end
     end
 
     describe 'when nested params' do
@@ -293,6 +308,21 @@ describe RenameParams::Macros::Rename, type: :controller do
           put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
           expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'contact' => { 'info' => { 'name' =>'Marcelo' } })
         end
+      end
+    end
+
+    context 'and converting values' do
+      controller(ActionController::Base) do
+        rename :admin, to: :role, namespace: :user, convert: { true: ['admin'], false: [] }, move_to: :root
+
+        def index
+          head :ok
+        end
+      end
+
+      it 'renames admin to role and converts value' do
+        get :index, { user: { admin: 'true' } }
+        expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'user' => {}, 'role' => ['admin'])
       end
     end
   end

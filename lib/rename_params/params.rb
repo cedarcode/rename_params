@@ -14,7 +14,7 @@ module RenameParams
 
       if converter && has_key?(key, namespace)
         new_value = converter.convert(get(key, namespace))
-        set(key, new_value)
+        set(key, new_value, namespace)
       end
     end
 

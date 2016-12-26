@@ -169,7 +169,116 @@ they were defined. So keep this in mind if one transformation depends on a previ
 ## Moving params
 
 There will be some cases where you will need to move a param from one namespace to another. For those
-cases, you can uses the `move_to` option.
+cases, you can use the `move` macro.
+
+```ruby
+class UsersController < ApplicationController
+  # Moves params[:username] to params[:user][:username]
+  move :username, to: [:user], only: :create
+
+  def create
+    #...
+  end
+end
+```
+
+In this case, the params were sent like this:
+```
+> puts params
+{ username: 'aperson' }
+```
+
+And they were transformed to:
+```
+> puts params
+{
+  user: {
+    username: 'aperson'
+  }
+}
+```
+
+You can specify deeper nesting using the array notation. Example:
+```ruby
+class UsersController < ApplicationController
+  # Moves params[:street] to params[:contact][:address][:street]
+  move :street, to: [:contact, :address]
+end
+```
+
+This will be renamed to:
+```
+> puts params
+{
+  contact: {
+    address: {
+      street: '123 St.'
+    }
+  }
+}
+```
+
+### Using a namespace with move
+The `move` option also accepts a `namespace` just like `rename`. If you want to move something that is not at the root
+level, you can always specify the path to it using a namespace.
+
+Let's say you have a UsersController
+
+
+```ruby
+class UsersController < ApplicationController
+  # Moves params[:user][:address][:street] to params[:user][:street]
+  move :street, namespace: [:user, :address], to: :user
+end
+```
+
+This will be renamed from this:
+```
+> puts params
+{
+  user: {
+    address: {
+      street: '123 St.'
+    }
+  }
+}
+```
+To this:
+```
+> puts params
+{
+  user: {
+    street: '123 St.'
+  }
+}
+```
+
+### The root option
+
+If you need to move a param to the root level, you can do that by using the `:root` keyword:
+
+```ruby
+class UsersController < ApplicationController
+  # Moves params[:user][:login] to params[:login]
+  move :login, namespace: :user, to: :root
+end
+```
+
+Doing a request like the following:
+```
+GET `/users?user[login]=aperson`
+```
+
+Will rename the params to:
+```
+> puts params
+{ login: 'aperson' }
+```
+
+### Combining move and rename
+
+If you want to rename something and move it to a different namespace, you can do that by either first calling `rename`
+and then `move` in the line below, or you can use the `move_to` option within the same `rename` clause.
 
 ```ruby
 class UsersController < ApplicationController
@@ -191,34 +300,26 @@ In this case, the params were sent like
 But they were transformed to:
 ```
 > puts params
-{ 
+{
   user: {
     login: 'aperson
   }
 }
 ```
 
-### The root option
-
-If you need to move a param to the `root` level, you can do that:
-
+This is the same than doing:
 ```ruby
 class UsersController < ApplicationController
-  # Renames params[:user][:login] to params[:username]
-  rename :login, to: :username, move_to: :root
+  # Renames params[:username] to params[:user][:login]
+  rename :username, to: :login, only: :create
+  move :login, to: :user, only: :create
+
+  def create
+    #...
+  end
 end
 ```
 
-Doing a request like the following:
-```
-GET `/users?user[login]=aperson`
-```
-
-Will rename the params to:
-```
-> puts params
-{ username: 'aperson' }
-```
 
 ## Contributing
 

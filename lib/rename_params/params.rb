@@ -23,7 +23,7 @@ module RenameParams
     end
 
     def move(key, target = [], namespace = [])
-      set(key, delete(key, namespace), target)
+      set(key, delete(key, namespace), target) if has_key?(key, namespace)
     end
 
     private

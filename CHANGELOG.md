@@ -1,3 +1,6 @@
+## v1.1.2
+* Fix issue with move_to option when param is not sent
+
 ## v1.1.1
 * Fix issue with converting values when they are namespaced
 

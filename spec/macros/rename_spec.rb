@@ -285,9 +285,18 @@ describe RenameParams::Macros::Rename, type: :controller do
       describe 'move_to' do
         before { routes.draw { get 'update' => 'anonymous#update' } }
 
-        it 'renames billing_contact[:name] to contact[:name]' do
-          put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'contact' => { 'name' =>'Marcelo' })
+        context 'when sending params' do
+          it 'renames billing_contact[:name] to contact[:name]' do
+            put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
+            expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'contact' => { 'name' =>'Marcelo' })
+          end
+        end
+
+        context 'when not sending params' do
+          it 'leaves params as they were' do
+            put :update
+            expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update')
+          end
         end
       end
     end

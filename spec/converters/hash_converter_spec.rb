@@ -5,6 +5,6 @@ describe RenameParams::Converters::HashConverter do
   describe '#convert' do
     it { expect(converter.convert(:a)).to eq 'A' }
     it { expect(converter.convert(:b)).to eq 'B' }
-    it { expect(converter.convert(:c)).to be_nil }
+    it { expect(converter.convert(:c)).to be :c }
   end
 end

@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    rename_params (1.1.2)
+    rename_params (1.1.3)
       actionpack (>= 3.2)
       activesupport (>= 3.2)
 

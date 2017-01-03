@@ -6,7 +6,7 @@ module RenameParams
       end
 
       def convert(value)
-        @hash.with_indifferent_access[value]
+        @hash.with_indifferent_access[value] || value
       end
     end
   end

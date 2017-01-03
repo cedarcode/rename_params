@@ -46,6 +46,13 @@ describe RenameParams::Macros::Rename, type: :controller do
             expect(controller.params).to eq default_params
           end
         end
+
+        context 'if param is not included in enum' do
+          it 'leaves params as they were' do
+            get :index, { admin: 'some_value' }
+            expect(controller.params).to eq default_params.merge('role' => 'some_value')
+          end
+        end
       end
 
       context 'and using a Proc converter' do

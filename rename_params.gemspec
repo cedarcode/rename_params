@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'Simple params renaming for Rails applications'
   s.authors     = ['Marcelo Casiraghi']
   s.email       = 'marcelo@paragon-labs.com'
-  s.homepage    = 'http://rubygems.org/gems/rename_params'
+  s.homepage    = 'https://github.com/marceloeloelo/rename_params'
   s.license     = 'MIT'
 
   s.files         = `git ls-files -- lib/*`.split("\n")

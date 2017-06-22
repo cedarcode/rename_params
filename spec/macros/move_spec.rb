@@ -12,7 +12,7 @@ describe RenameParams::Macros::Move, type: :controller do
       before { routes.draw { get 'update' => 'anonymous#update' } }
 
       it 'moves billing_contact[:name] to root' do
-        put :update, { billing_contact: { name: 'Marcelo' } }
+        put :update, with_params(billing_contact: { name: 'Marcelo' })
         expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: {}, name: 'Marcelo'))
       end
     end
@@ -31,7 +31,7 @@ describe RenameParams::Macros::Move, type: :controller do
       before { routes.draw { get 'update' => 'anonymous#update' } }
 
       it 'moves billing_contact[:address][:street] to billing_contact[:street]' do
-        put :update, { billing_contact: { address: { street: '123 St' } } }
+        put :update, with_params(billing_contact: { address: { street: '123 St' } })
         expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: { address: {}, street: '123 St' }))
       end
     end
@@ -50,7 +50,7 @@ describe RenameParams::Macros::Move, type: :controller do
       before { routes.draw { get 'update' => 'anonymous#update' } }
 
       it 'moves billing_contact[:name] to contact[:name]' do
-        put :update, { billing_contact: { name: 'Marcelo' } }
+        put :update, with_params(billing_contact: { name: 'Marcelo' })
         expect(controller.params).to eq( build_params(controller: 'anonymous', action: 'update', billing_contact: {}, contact: { name: 'Marcelo' }))
       end
     end
@@ -69,7 +69,7 @@ describe RenameParams::Macros::Move, type: :controller do
       before { routes.draw { get 'update' => 'anonymous#update' } }
 
       it 'moves billing_contact[:name] to contact[:info][:name]' do
-        put :update, { billing_contact: { name: 'Marcelo' } }
+        put :update, with_params(billing_contact: { name: 'Marcelo' })
         expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: {}, contact: { info: { name: 'Marcelo' } }))
       end
     end

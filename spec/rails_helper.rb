@@ -14,4 +14,12 @@ RSpec.configure do |config|
       end
     end
   end
+
+  def with_params(params = {})
+    if Rails.version.start_with?('5')
+      { params: params }
+    else
+      params
+    end
+  end
 end

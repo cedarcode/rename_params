@@ -1,5 +1,5 @@
 PATH
-  remote: .
+  remote: ..
   specs:
     rename_params (1.1.3)
       actionpack (>= 4.0)
@@ -138,7 +138,7 @@ DEPENDENCIES
   appraisal
   bundler
   byebug
-  rails
+  rails (~> 5.1.0)
   rename_params!
   rspec-rails
   sqlite3

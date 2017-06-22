@@ -11,6 +11,8 @@ elsif Rails.version.start_with?('4.2')
   require 'support/apps/rails4_2'
 elsif Rails.version.start_with?('5.0')
   require 'support/apps/rails5_0'
+elsif Rails.version.start_with?('5.1')
+  require 'support/apps/rails5_1'
 end
 require 'rename_params'
 

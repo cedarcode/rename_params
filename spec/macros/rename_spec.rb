@@ -1,6 +1,6 @@
 describe RenameParams::Macros::Rename, type: :controller do
   context 'when not filtering' do
-    let(:default_params) { { 'controller' => 'anonymous', 'action' => 'index' } }
+    let(:default_params) { { controller: 'anonymous', action: 'index' } }
     before { routes.draw { get 'index' => 'anonymous#index' } }
 
     describe 'when just renaming params' do
@@ -14,13 +14,13 @@ describe RenameParams::Macros::Rename, type: :controller do
 
       it 'renames username to login' do
         get :index, { username: 'aperson' }
-        expect(controller.params).to eq default_params.merge('login' => 'aperson')
+        expect(controller.params).to eq build_params(default_params.merge(login: 'aperson'))
       end
 
       context 'if param is not sent' do
         it 'leaves params as they were' do
           get :index
-          expect(controller.params).to eq default_params
+          expect(controller.params).to eq build_params(default_params)
         end
       end
     end
@@ -37,20 +37,20 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames admin to role and converts value' do
           get :index, { admin: 'true' }
-          expect(controller.params).to eq default_params.merge('role' => ['admin'])
+          expect(controller.params).to eq build_params(default_params.merge(role: ['admin']))
         end
 
         context 'if param is not sent' do
           it 'leaves params as they were' do
             get :index
-            expect(controller.params).to eq default_params
+            expect(controller.params).to eq build_params(default_params)
           end
         end
 
         context 'if param is not included in enum' do
           it 'leaves params as they were' do
             get :index, { admin: 'some_value' }
-            expect(controller.params).to eq default_params.merge('role' => 'some_value')
+            expect(controller.params).to eq build_params(default_params.merge(role: 'some_value'))
           end
         end
       end
@@ -66,13 +66,13 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames amount_due to amount_due_in_cents and converts value' do
           get :index, { amount_due: 100 }
-          expect(controller.params).to eq default_params.merge('amount_due_in_cents' => 10000)
+          expect(controller.params).to eq build_params(default_params.merge(amount_due_in_cents: 10000))
         end
 
         context 'if param is not sent' do
           it 'leaves params as they were' do
             get :index
-            expect(controller.params).to eq default_params
+            expect(controller.params).to eq build_params(default_params)
           end
         end
       end
@@ -94,13 +94,13 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames amount_due to amount_due_in_cents and converts value' do
           get :index, { amount_due: 100 }
-          expect(controller.params).to eq default_params.merge('amount_due_in_cents' => 10000)
+          expect(controller.params).to eq build_params(default_params.merge(amount_due_in_cents: 10000))
         end
 
         context 'if param is not sent' do
           it 'leaves params as they were' do
             get :index
-            expect(controller.params).to eq default_params
+            expect(controller.params).to eq build_params(default_params)
           end
         end
       end
@@ -116,7 +116,7 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames admin to role and converts value' do
           get :index, { user: { admin: 'true' } }
-          expect(controller.params).to eq default_params.merge({ 'user' => { 'role' => ['admin'] } })
+          expect(controller.params).to eq build_params(default_params.merge({ user: { role: ['admin'] } }))
         end
       end
     end
@@ -133,13 +133,13 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames username to login' do
           get :index, { 'session' => { 'username' => 'aperson' } }
-          expect(controller.params).to eq default_params.merge('session' => { 'login' => 'aperson' })
+          expect(controller.params).to eq build_params(default_params.merge(session: { login: 'aperson' }))
         end
 
         context 'if param is not sent' do
           it 'leaves params as they were' do
             get :index, { 'session' => '' }
-            expect(controller.params).to eq default_params.merge('session' => '')
+            expect(controller.params).to eq build_params(default_params.merge(session: ''))
           end
         end
       end
@@ -155,20 +155,20 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         it 'renames username to login' do
           get :index, { 'session' => { 'credentials' => { 'username' => 'aperson' } } }
-          expect(controller.params).to eq default_params.merge('session' => { 'credentials' => { 'login' => 'aperson' } })
+          expect(controller.params).to eq build_params(default_params.merge(session: { credentials: { login: 'aperson' } }))
         end
 
         context 'if param is not sent' do
           it 'leaves params as they were' do
             get :index, { 'session' => { 'credentials' => '' } }
-            expect(controller.params).to eq default_params.merge('session' => { 'credentials' => '' })
+            expect(controller.params).to eq build_params(default_params.merge(session: { credentials: '' }))
           end
         end
 
         context 'if namespace is not sent' do
           it 'leaves params as they were' do
             get :index, { 'session' => '' }
-            expect(controller.params).to eq default_params.merge('session' => '')
+            expect(controller.params).to eq build_params(default_params.merge(session: ''))
           end
         end
       end
@@ -193,8 +193,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'show' => 'anonymous#show' } }
 
         it 'renames username to login' do
-          get :show, { 'username' => 'aperson' }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'show', 'login' => 'aperson')
+          get :show, { username: 'aperson' }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'show', login: 'aperson'))
         end
       end
 
@@ -202,8 +202,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'index' => 'anonymous#index' } }
 
         it 'keeps username param' do
-          get :index, { 'username' => 'aperson' }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'username' => 'aperson')
+          get :index, { username: 'aperson' }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'index', username: 'aperson'))
         end
       end
     end
@@ -225,8 +225,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'show' => 'anonymous#show' } }
 
         it 'keeps username param' do
-          get :show, { 'username' => 'aperson' }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'show', 'username' => 'aperson')
+          get :show, { username: 'aperson' }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'show', username: 'aperson'))
         end
       end
 
@@ -234,8 +234,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'index' => 'anonymous#index' } }
 
         it 'renames username to login' do
-          get :index, { 'username' => 'aperson' }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'login' => 'aperson')
+          get :index, { username: 'aperson' }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'index', login: 'aperson'))
         end
       end
     end
@@ -255,8 +255,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'update' => 'anonymous#update' } }
 
         it 'renames billing_contact[:name] to billing_contact_name' do
-          put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'billing_contact_name' => 'Marcelo' )
+          put :update, { billing_contact: { name: 'Marcelo' } }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: {}, billing_contact_name: 'Marcelo'))
         end
       end
     end
@@ -274,8 +274,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'update' => 'anonymous#update' } }
 
         it 'renames billing_contact[:address][:street] to billing_contact[:street_address]' do
-          put :update, { 'billing_contact' => { 'address' => { 'street' => '123 St' } } }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => { 'address' => {}, 'address_street' => '123 St' } )
+          put :update, { billing_contact: { address: { street: '123 St' } } }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: { address: {}, address_street: '123 St' } ))
         end
       end
     end
@@ -294,15 +294,15 @@ describe RenameParams::Macros::Rename, type: :controller do
 
         context 'when sending params' do
           it 'renames billing_contact[:name] to contact[:name]' do
-            put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
-            expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'contact' => { 'name' =>'Marcelo' })
+            put :update, { billing_contact: { name: 'Marcelo' } }
+            expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: {}, contact: { name: 'Marcelo' }))
           end
         end
 
         context 'when not sending params' do
           it 'leaves params as they were' do
             put :update
-            expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update')
+            expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update'))
           end
         end
       end
@@ -321,8 +321,8 @@ describe RenameParams::Macros::Rename, type: :controller do
         before { routes.draw { get 'update' => 'anonymous#update' } }
 
         it 'renames billing_contact[:name] to contact[:info][:name]' do
-          put :update, { 'billing_contact' => { 'name' => 'Marcelo' } }
-          expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'update', 'billing_contact' => {}, 'contact' => { 'info' => { 'name' =>'Marcelo' } })
+          put :update, { billing_contact: { name: 'Marcelo' } }
+          expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'update', billing_contact: {}, contact: { info: { 'name' =>'Marcelo' } }))
         end
       end
     end
@@ -338,7 +338,7 @@ describe RenameParams::Macros::Rename, type: :controller do
 
       it 'renames admin to role and converts value' do
         get :index, { user: { admin: 'true' } }
-        expect(controller.params).to eq('controller' => 'anonymous', 'action' => 'index', 'user' => {}, 'role' => ['admin'])
+        expect(controller.params).to eq(build_params(controller: 'anonymous', action: 'index', user: {}, role: ['admin']))
       end
     end
   end

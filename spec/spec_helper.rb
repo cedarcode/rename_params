@@ -6,6 +6,8 @@ require 'rails'
 case Rails.version
   when '4.0.13'
     require 'support/apps/rails4_0'
+  when '4.1.16'
+    require 'support/apps/rails4_1'
   when '4.2.7.1'
     require 'support/apps/rails4_2'
   when '5.0.0.1'

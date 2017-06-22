@@ -1,5 +1,5 @@
 PATH
-  remote: ../
+  remote: ..
   specs:
     rename_params (1.1.3)
       actionpack (>= 3.2)
@@ -144,4 +144,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.13.6
+   1.14.5

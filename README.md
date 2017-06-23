@@ -302,7 +302,7 @@ But they were transformed to:
 > puts params
 {
   user: {
-    login: 'aperson
+    login: 'aperson'
   }
 }
 ```

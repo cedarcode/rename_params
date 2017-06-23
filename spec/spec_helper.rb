@@ -3,13 +3,16 @@ ENV['DATABASE_URL'] = 'sqlite3://localhost/tmp/rename_params_test'
 
 require 'bundler/setup'
 require 'rails'
-case Rails.version
-  when '3.2.22.5'
-    require 'support/apps/rails3_2'
-  when '4.2.7.1'
-    require 'support/apps/rails4_2'
-  when '5.0.0.1'
-    require 'support/apps/rails5_0'
+if Rails.version.start_with?('4.0')
+  require 'support/apps/rails4_0'
+elsif Rails.version.start_with?('4.1')
+  require 'support/apps/rails4_1'
+elsif Rails.version.start_with?('4.2')
+  require 'support/apps/rails4_2'
+elsif Rails.version.start_with?('5.0')
+  require 'support/apps/rails5_0'
+elsif Rails.version.start_with?('5.1')
+  require 'support/apps/rails5_1'
 end
 require 'rename_params'
 

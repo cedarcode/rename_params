@@ -7,7 +7,7 @@ module RenameParams
           rename_param = args.shift
           options = build_options(*args)
 
-          klass.before_filter options[:filters] do |controller|
+          klass.before_action options[:filters] do |controller|
             params = RenameParams::Params.new(controller.params, controller)
             params.convert(rename_param, options[:convert], options[:namespace])
             params.rename(rename_param, options[:to], options[:namespace])

@@ -1,3 +1,7 @@
+## v2.0.0
+* Add support for rails 5.1
+* Lose support for rails 3.2
+
 ## v1.1.3
 * Fix issue with enum converter when param sent is not present in the
   enum definition

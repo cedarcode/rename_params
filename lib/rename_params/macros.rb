@@ -14,5 +14,6 @@ module RenameParams
   end
 end
 
-ActionController::API.send(:include, RenameParams::Macros) if defined?(ActionController::API)
-ActionController::Base.send(:include, RenameParams::Macros) if defined?(ActionController::Base)
+ActiveSupport.on_load :action_controller do
+  include RenameParams::Macros
+end

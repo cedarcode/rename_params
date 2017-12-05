@@ -1,3 +1,6 @@
+## v2.0.1
+* Fix macros inclusion in controllers by making use of ActiveSupport on_load hook
+
 ## v2.0.0
 * Add support for rails 5.1
 * Lose support for rails 3.2

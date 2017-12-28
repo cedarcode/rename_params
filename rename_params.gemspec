@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Simple params renaming for Rails applications'
   s.description = 'Simple params renaming for Rails applications'
   s.authors     = ['Marcelo Casiraghi']
-  s.email       = 'marcelo@paragon-labs.com'
+  s.email       = 'marcelo@cedarcode.com'
   s.homepage    = 'https://github.com/marceloeloelo/rename_params'
   s.license     = 'MIT'
 

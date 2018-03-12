@@ -1,7 +1,7 @@
-# RenameParams
+# rename_params
 
-[![Build Status](https://travis-ci.org/marceloeloelo/rename_params.svg?branch=master)](https://travis-ci.org/marceloeloelo/rename_params)
-[![Code Climate](https://codeclimate.com/github/marceloeloelo/rename_params/badges/gpa.svg)](https://codeclimate.com/github/marceloeloelo/rename_params)
+[![Build Status](https://travis-ci.org/cedarcode/rename_params.svg?branch=master)](https://travis-ci.org/cedarcode/rename_params)
+[![Code Climate](https://codeclimate.com/github/cedarcode/rename_params/badges/gpa.svg)](https://codeclimate.com/github/cedarcode/rename_params)
 [![Gem Version](https://badge.fury.io/rb/rename_params.svg)](https://badge.fury.io/rb/rename_params)
 
 Simple params renaming for Rails applications.
@@ -323,7 +323,7 @@ end
 
 ## Contributing
 
-1. Fork it ( https://github.com/marceloeloelo/rename_params/ )
+1. Fork it ( https://github.com/cedarcode/rename_params/ )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
